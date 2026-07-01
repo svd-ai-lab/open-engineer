@@ -36,8 +36,15 @@ jobs:
 
       - name: Normalize Windows checkout symlinks
         run: |
-          Copy-Item packages/ui/src/custom-elements.d.ts packages/app/src/custom-elements.d.ts -Force
-          Copy-Item packages/ui/src/custom-elements.d.ts packages/enterprise/src/custom-elements.d.ts -Force
+          $source = "packages/ui/src/custom-elements.d.ts"
+          foreach ($target in @("packages/app/src/custom-elements.d.ts", "packages/enterprise/src/custom-elements.d.ts")) {
+            $item = Get-Item $target -Force
+            if ($item.LinkType) {
+              Write-Host "$target is a $($item.LinkType); leaving it unchanged."
+              continue
+            }
+            Copy-Item $source $target -Force
+          }
 
       - name: Setup Node
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
