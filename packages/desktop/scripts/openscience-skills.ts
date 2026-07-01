@@ -29,11 +29,22 @@ export type LocalSkillManifestEntry = {
   excludes?: string[]
 }
 
+export type ExternalResourceManifestEntry = {
+  type: "external-resource"
+  name: string
+  repo: string
+  path: string
+  localCandidates?: string[]
+  excludes?: string[]
+}
+
 export type SkillManifestEntry = ExternalSkillManifestEntry | LocalSkillManifestEntry
+export type ResourceManifestEntry = ExternalResourceManifestEntry
 
 export type SkillsManifest = {
   version: number
   defaultExcludes?: string[]
+  resources?: ResourceManifestEntry[]
   skills: SkillManifestEntry[]
 }
 
@@ -53,10 +64,21 @@ export type LocalSkillLockEntry = {
   skillMdSha256: string
 }
 
+export type ExternalResourceLockEntry = {
+  type: "external-resource"
+  name: string
+  repo: string
+  commit: string
+  path: string
+  directorySha256: string
+}
+
 export type SkillLockEntry = ExternalSkillLockEntry | LocalSkillLockEntry
+export type ResourceLockEntry = ExternalResourceLockEntry
 
 export type SkillsLock = {
   version: number
+  resources?: ResourceLockEntry[]
   skills: SkillLockEntry[]
 }
 
@@ -111,6 +133,54 @@ export function normalizedFileSha256(filePath: string) {
   return sha256(normalizeText(readFileSync(filePath, "utf8")))
 }
 
+export function normalizeSkillTextForBundle(text: string) {
+  const normalized = normalizeText(text)
+  const lines = normalized.split("\n")
+  if (lines[0] !== "---") return normalized
+
+  const end = lines.findIndex((line, index) => index > 0 && line === "---")
+  if (end === -1) return normalized
+
+  const unsupportedTopLevelKeys = /^(author|status|version):\s*/i
+  const frontmatter = lines.slice(1, end).filter((line) => !unsupportedTopLevelKeys.test(line))
+  return normalizeText(["---", ...frontmatter, "---", ...lines.slice(end + 1)].join("\n"))
+}
+
+export function normalizedSkillFileSha256(filePath: string) {
+  return sha256(normalizeSkillTextForBundle(readFileSync(filePath, "utf8")))
+}
+
+export function normalizedDirectorySha256(root: string, excludes: string[] = []) {
+  const hash = createHash("sha256")
+  const walk = (current: string, relativeRoot = "") => {
+    for (const entry of readdirSync(current, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
+      const relativePath = path.join(relativeRoot, entry.name)
+      if (shouldExclude(relativePath, excludes)) continue
+
+      const full = path.join(current, entry.name)
+      if (entry.isDirectory()) {
+        walk(full, relativePath)
+        continue
+      }
+      if (!entry.isFile()) continue
+
+      const portablePath = relativePath.split(path.sep).join("/")
+      hash.update("file\0")
+      hash.update(portablePath)
+      hash.update("\0")
+      if (textExtensions.has(path.extname(entry.name).toLowerCase())) {
+        hash.update(normalizeText(readFileSync(full, "utf8")))
+      } else {
+        hash.update(readFileSync(full))
+      }
+      hash.update("\0")
+    }
+  }
+
+  walk(root)
+  return hash.digest("hex")
+}
+
 export function runGit(cwd: string, args: string[], options?: { allowFailure?: boolean }) {
   const result = spawnSync("git", args, { cwd, encoding: "utf8" })
   if (result.status !== 0 && !options?.allowFailure) {
@@ -145,19 +215,23 @@ export function skillNameFromFrontmatter(skillText: string) {
 export function validateSkillFile(sourceDir: string, expectedName: string, expectedSha?: string) {
   const skillFile = path.join(sourceDir, "SKILL.md")
   if (!existsSync(skillFile)) throw new Error(`Missing SKILL.md for ${expectedName}: ${sourceDir}`)
-  const skillText = readFileSync(skillFile, "utf8")
+  const skillText = normalizeSkillTextForBundle(readFileSync(skillFile, "utf8"))
   const frontmatterName = skillNameFromFrontmatter(skillText)
   if (frontmatterName !== expectedName) {
     throw new Error(`Skill frontmatter name mismatch for ${expectedName}: ${frontmatterName ?? "<missing>"}`)
   }
-  const actualSha = normalizedFileSha256(skillFile)
+  const actualSha = normalizedSkillFileSha256(skillFile)
   if (expectedSha && actualSha !== expectedSha) {
     throw new Error(`SKILL.md sha256 mismatch for ${expectedName}: expected ${expectedSha}, got ${actualSha}`)
   }
   return actualSha
 }
 
-export function resolveLocalSource(entry: ExternalSkillManifestEntry, lock: ExternalSkillLockEntry) {
+function resolveLocalExternalPath(
+  entry: ExternalSkillManifestEntry | ExternalResourceManifestEntry,
+  lock: ExternalSkillLockEntry | ExternalResourceLockEntry,
+  options: { requireSkillFile: boolean },
+) {
   for (const candidate of entry.localCandidates ?? []) {
     const root = repoRootFor(candidate)
     if (!root) continue
@@ -175,9 +249,19 @@ export function resolveLocalSource(entry: ExternalSkillManifestEntry, lock: Exte
     }
 
     const sourceDir = path.join(root, entry.path)
-    if (existsSync(path.join(sourceDir, "SKILL.md"))) return sourceDir
+    if (!existsSync(sourceDir)) continue
+    if (options.requireSkillFile && !existsSync(path.join(sourceDir, "SKILL.md"))) continue
+    return sourceDir
   }
   return undefined
+}
+
+export function resolveLocalSource(entry: ExternalSkillManifestEntry, lock: ExternalSkillLockEntry) {
+  return resolveLocalExternalPath(entry, lock, { requireSkillFile: true })
+}
+
+export function resolveLocalResource(entry: ExternalResourceManifestEntry, lock: ExternalResourceLockEntry) {
+  return resolveLocalExternalPath(entry, lock, { requireSkillFile: false })
 }
 
 export function ensureCachedRepo(repo: string, commit: string, offline: boolean) {
@@ -219,6 +303,15 @@ export function materializedSourceDir(entry: SkillManifestEntry, lock: SkillLock
   return { sourceDir: path.join(checkout, entry.path), source: "cache" }
 }
 
+export function materializedResourceDir(entry: ResourceManifestEntry, lock: ResourceLockEntry, offline: boolean) {
+  if (lock.type !== "external-resource") throw new Error(`Lock type mismatch for resource ${entry.name}`)
+  const local = resolveLocalResource(entry, lock)
+  if (local) return { sourceDir: local, source: "local-checkout" }
+
+  const checkout = ensureCachedRepo(entry.repo, lock.commit, offline)
+  return { sourceDir: path.join(checkout, entry.path), source: "cache" }
+}
+
 function shouldExclude(relativePath: string, excludes: string[]) {
   const parts = relativePath.split(/[\\/]+/).filter(Boolean)
   if (parts.some((part) => excludes.includes(part))) return true
@@ -245,6 +338,10 @@ export function copySkillDirectory(sourceDir: string, destDir: string, excludes:
       if (!entry.isFile()) continue
 
       mkdirSync(path.dirname(to), { recursive: true })
+      if (entry.name === "SKILL.md") {
+        writeFileSync(to, normalizeSkillTextForBundle(readFileSync(from, "utf8")), "utf8")
+        continue
+      }
       if (textExtensions.has(path.extname(entry.name).toLowerCase())) {
         writeFileSync(to, normalizeText(readFileSync(from, "utf8")), "utf8")
         continue
@@ -281,5 +378,11 @@ export function findLockEntry(lock: SkillsLock, entry: SkillManifestEntry) {
     if (item.name !== entry.name || item.type !== entry.type || item.path !== entry.path) return false
     if (entry.type === "external") return item.type === "external" && item.repo === entry.repo
     return true
+  })
+}
+
+export function findResourceLockEntry(lock: SkillsLock, entry: ResourceManifestEntry) {
+  return (lock.resources ?? []).find((item) => {
+    return item.name === entry.name && item.type === entry.type && item.path === entry.path && item.repo === entry.repo
   })
 }

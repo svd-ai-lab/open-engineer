@@ -1,11 +1,21 @@
 {
   "version": 1,
+  "resources": [
+    {
+      "type": "external-resource",
+      "name": "_shared",
+      "repo": "Yuan1z0825/nature-skills",
+      "commit": "0bb3a646986ddcb0a69513d19c0219eb238ebc07",
+      "path": "skills/_shared",
+      "directorySha256": "0aede752ff287d0f0730c0b9f33950d9661eb09d22c24719370ccfda9f924ad3"
+    }
+  ],
   "skills": [
     {
       "type": "local",
       "name": "research-paper-data",
       "path": "skills-src/research-paper-data",
-      "skillMdSha256": "7db565f55d9d52ab797380cb51cfe49a0c02ee70265e647a60bd07b9c543f0ad"
+      "skillMdSha256": "ed42fb90ab926fcd911fa3e6203d030e45a1fc11f859b0f0946b8d64c39fb527"
     },
     {
       "type": "external",
@@ -54,6 +64,38 @@
       "commit": "57546260929473d4e0d1c1bb75297be2fdfa1949",
       "path": "skills/xlsx",
       "skillMdSha256": "6afac653199783750339939b701fc9fa403184814c70d78f17c65de41806e2f1"
+    },
+    {
+      "type": "external",
+      "name": "nature-figure",
+      "repo": "Yuan1z0825/nature-skills",
+      "commit": "0bb3a646986ddcb0a69513d19c0219eb238ebc07",
+      "path": "skills/nature-figure",
+      "skillMdSha256": "64911be26ee606cf765b6d177422d77788fa30d5ca43080fc28b6c3c4121eb24"
+    },
+    {
+      "type": "external",
+      "name": "nature-polishing",
+      "repo": "Yuan1z0825/nature-skills",
+      "commit": "0bb3a646986ddcb0a69513d19c0219eb238ebc07",
+      "path": "skills/nature-polishing",
+      "skillMdSha256": "3b0da1032a1961b3c755c33966714fa0e39617477aba89e5be424d8968e6bd50"
+    },
+    {
+      "type": "external",
+      "name": "nature-writing",
+      "repo": "Yuan1z0825/nature-skills",
+      "commit": "0bb3a646986ddcb0a69513d19c0219eb238ebc07",
+      "path": "skills/nature-writing",
+      "skillMdSha256": "d383fecad62b823d58f987905818e925c01242940e5545929e0738d95caeeab2"
+    },
+    {
+      "type": "external",
+      "name": "nature-reviewer",
+      "repo": "Yuan1z0825/nature-skills",
+      "commit": "0bb3a646986ddcb0a69513d19c0219eb238ebc07",
+      "path": "skills/nature-reviewer",
+      "skillMdSha256": "ae86ec1c6289e84229b25b6c9c211a16249268a344c1c807f7099a0ba2bf081d"
     }
   ]
 }

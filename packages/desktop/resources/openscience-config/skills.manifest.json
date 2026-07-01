@@ -6,7 +6,17 @@
     ".mypy_cache",
     ".pytest_cache",
     "evidence",
+    "evals",
     "tests"
+  ],
+  "resources": [
+    {
+      "type": "external-resource",
+      "name": "_shared",
+      "repo": "Yuan1z0825/nature-skills",
+      "path": "skills/_shared",
+      "localCandidates": ["../nature-skills"]
+    }
   ],
   "skills": [
     {
@@ -55,6 +65,34 @@
       "repo": "anthropics/skills",
       "path": "skills/xlsx",
       "localCandidates": ["../skills"]
+    },
+    {
+      "type": "external",
+      "name": "nature-figure",
+      "repo": "Yuan1z0825/nature-skills",
+      "path": "skills/nature-figure",
+      "localCandidates": ["../nature-skills"]
+    },
+    {
+      "type": "external",
+      "name": "nature-polishing",
+      "repo": "Yuan1z0825/nature-skills",
+      "path": "skills/nature-polishing",
+      "localCandidates": ["../nature-skills"]
+    },
+    {
+      "type": "external",
+      "name": "nature-writing",
+      "repo": "Yuan1z0825/nature-skills",
+      "path": "skills/nature-writing",
+      "localCandidates": ["../nature-skills"]
+    },
+    {
+      "type": "external",
+      "name": "nature-reviewer",
+      "repo": "Yuan1z0825/nature-skills",
+      "path": "skills/nature-reviewer",
+      "localCandidates": ["../nature-skills"]
     }
   ]
 }
