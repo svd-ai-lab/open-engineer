@@ -2,15 +2,17 @@
   "name": "@opencode-ai/desktop",
   "private": true,
   "version": "1.17.11",
+  "description": "OpenScience desktop app based on OpenCode",
   "type": "module",
   "license": "MIT",
-  "homepage": "https://opencode.ai",
+  "homepage": "https://github.com/svd-ai-lab/openscience",
   "author": {
-    "name": "OpenCode",
-    "email": "hello@opencode.ai"
+    "name": "SVD AI Lab"
   },
   "scripts": {
     "typecheck": "tsgo -b",
+    "materialize:skills": "bun ./scripts/materialize-openscience-skills.ts",
+    "update:skills-lock": "bun ./scripts/update-openscience-skills-lock.ts",
     "predev": "bun ./scripts/predev.ts",
     "dev": "electron-vite dev",
     "prebuild": "bun ./scripts/prebuild.ts",
@@ -19,6 +21,7 @@
     "package": "electron-builder --config electron-builder.config.ts",
     "package:mac": "electron-builder --mac --config electron-builder.config.ts",
     "package:win": "electron-builder --win --config electron-builder.config.ts",
+    "package:win:x64": "electron-builder --win --x64 --config electron-builder.config.ts",
     "package:linux": "electron-builder --linux --config electron-builder.config.ts",
     "native:build": "bun install --cwd native"
   },

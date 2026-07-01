@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Paper Data"
+  short_description: "Search papers and legal OA full text"
+  default_prompt: "Use $research-paper-data to search for papers, resolve identifiers, and find legal open-access full text."

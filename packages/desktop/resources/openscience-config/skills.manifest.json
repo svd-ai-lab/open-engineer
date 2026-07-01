@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "defaultExcludes": [
+    ".venv",
+    "__pycache__",
+    ".mypy_cache",
+    ".pytest_cache",
+    "evidence",
+    "tests"
+  ],
+  "skills": [
+    {
+      "type": "local",
+      "name": "research-paper-data",
+      "path": "skills-src/research-paper-data"
+    },
+    {
+      "type": "external",
+      "name": "sim-paper-reproduction",
+      "repo": "svd-ai-lab/sim-skills",
+      "path": "sim-paper-reproduction",
+      "localCandidates": ["../sim-skills"]
+    },
+    {
+      "type": "external",
+      "name": "simulation-need-discovery",
+      "repo": "svd-ai-lab/sim-skills",
+      "path": "simulation-need-discovery",
+      "localCandidates": ["../sim-skills"]
+    },
+    {
+      "type": "external",
+      "name": "geometry-preview",
+      "repo": "svd-ai-lab/sim-skills",
+      "path": "geometry-preview",
+      "localCandidates": ["../sim-skills"]
+    },
+    {
+      "type": "external",
+      "name": "pdf",
+      "repo": "anthropics/skills",
+      "path": "skills/pdf",
+      "localCandidates": ["../skills"]
+    },
+    {
+      "type": "external",
+      "name": "docx",
+      "repo": "anthropics/skills",
+      "path": "skills/docx",
+      "localCandidates": ["../skills"]
+    },
+    {
+      "type": "external",
+      "name": "xlsx",
+      "repo": "anthropics/skills",
+      "path": "skills/xlsx",
+      "localCandidates": ["../skills"]
+    }
+  ]
+}

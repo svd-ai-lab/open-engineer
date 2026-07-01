@@ -1,0 +1,116 @@
+name: release-windows
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version without the v prefix, for example 0.1.0"
+        required: true
+        type: string
+      release_notes:
+        description: "User-facing release notes"
+        required: false
+        type: string
+      draft:
+        description: "Create a draft release"
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  windows-x64:
+    name: Windows x64 installer
+    runs-on: windows-2025
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - name: Normalize Windows checkout symlinks
+        run: |
+          Copy-Item packages/ui/src/custom-elements.d.ts packages/app/src/custom-elements.d.ts -Force
+          Copy-Item packages/ui/src/custom-elements.d.ts packages/enterprise/src/custom-elements.d.ts -Force
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "24"
+
+      - name: Setup Bun
+        uses: ./.github/actions/setup-bun
+
+      - name: Materialize science skills
+        run: bun run --cwd packages/desktop materialize:skills
+
+      - name: Typecheck desktop
+        run: bun run --cwd packages/desktop typecheck
+
+      - name: Build desktop
+        run: |
+          $env:OPENCODE_CHANNEL = "prod"
+          bun run --cwd packages/desktop build
+
+      - name: Package Windows x64
+        run: |
+          $env:OPENCODE_CHANNEL = "prod"
+          bun run --cwd packages/desktop package:win:x64
+
+      - name: Generate SHA256
+        run: |
+          $dist = Join-Path $PWD "packages/desktop/dist"
+          $installer = Get-ChildItem $dist -Filter "OpenScience-win-x64.exe" | Select-Object -First 1
+          if (-not $installer) {
+            throw "OpenScience-win-x64.exe was not produced in $dist"
+          }
+          $hash = (Get-FileHash -Algorithm SHA256 $installer.FullName).Hash.ToLowerInvariant()
+          "$hash  $($installer.Name)" | Set-Content -Path (Join-Path $dist "OpenScience-win-x64.exe.sha256.txt") -Encoding ascii
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = "v${{ inputs.version }}"
+          $notesInput = @'
+          ${{ inputs.release_notes }}
+          '@
+          $notesInput = $notesInput.Trim()
+          $notes = @"
+          OpenScience Windows x64 preview build.
+
+          This build is unsigned. Verify `OpenScience-win-x64.exe.sha256.txt` before installing.
+
+          $notesInput
+          "@
+          $notes = $notes.Trim()
+          $notesPath = Join-Path $env:RUNNER_TEMP "release-notes.md"
+          Set-Content -Path $notesPath -Value $notes -Encoding utf8
+
+          $dist = Join-Path $PWD "packages/desktop/dist"
+          $assets = @(
+            Join-Path $dist "OpenScience-win-x64.exe"
+            Join-Path $dist "OpenScience-win-x64.exe.blockmap"
+            Join-Path $dist "latest.yml"
+            Join-Path $dist "OpenScience-win-x64.exe.sha256.txt"
+          )
+          foreach ($asset in $assets) {
+            if (-not (Test-Path $asset)) {
+              throw "Missing release asset: $asset"
+            }
+          }
+
+          $args = @("release", "create", $tag, "--title", "OpenScience $tag", "--notes-file", $notesPath)
+          if ("${{ inputs.draft }}" -eq "true") {
+            $args += "--draft"
+          } else {
+            $args += "--latest"
+          }
+          $args += $assets
+          gh @args

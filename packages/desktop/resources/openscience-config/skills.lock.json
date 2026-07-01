@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "skills": [
+    {
+      "type": "local",
+      "name": "research-paper-data",
+      "path": "skills-src/research-paper-data",
+      "skillMdSha256": "7db565f55d9d52ab797380cb51cfe49a0c02ee70265e647a60bd07b9c543f0ad"
+    },
+    {
+      "type": "external",
+      "name": "sim-paper-reproduction",
+      "repo": "svd-ai-lab/sim-skills",
+      "commit": "c59e99f0c8d461386e7287382925c1f134300dcd",
+      "path": "sim-paper-reproduction",
+      "skillMdSha256": "3f72d63088a84407a15ea528696ee66f9de992ecce1a2bec549ecba3e7e742ea"
+    },
+    {
+      "type": "external",
+      "name": "simulation-need-discovery",
+      "repo": "svd-ai-lab/sim-skills",
+      "commit": "c59e99f0c8d461386e7287382925c1f134300dcd",
+      "path": "simulation-need-discovery",
+      "skillMdSha256": "4adc446d71d2cb5c2bc283ea63852806432d2f7f5127dfbb39c9798aa0295df7"
+    },
+    {
+      "type": "external",
+      "name": "geometry-preview",
+      "repo": "svd-ai-lab/sim-skills",
+      "commit": "c59e99f0c8d461386e7287382925c1f134300dcd",
+      "path": "geometry-preview",
+      "skillMdSha256": "6fdd2783f4df06a3d23687bb5deaf2c63b9e9e05c5dfef27cfc23d2c2b261118"
+    },
+    {
+      "type": "external",
+      "name": "pdf",
+      "repo": "anthropics/skills",
+      "commit": "57546260929473d4e0d1c1bb75297be2fdfa1949",
+      "path": "skills/pdf",
+      "skillMdSha256": "9f78b8359fbd4943ad260a7a1e436e5a96503406d6c34e99f69223d647d85b9c"
+    },
+    {
+      "type": "external",
+      "name": "docx",
+      "repo": "anthropics/skills",
+      "commit": "57546260929473d4e0d1c1bb75297be2fdfa1949",
+      "path": "skills/docx",
+      "skillMdSha256": "cfbabd72b1aec7dfaad988fb6e5e16b27dc744b9a00cae15db9045e95f53903e"
+    },
+    {
+      "type": "external",
+      "name": "xlsx",
+      "repo": "anthropics/skills",
+      "commit": "57546260929473d4e0d1c1bb75297be2fdfa1949",
+      "path": "skills/xlsx",
+      "skillMdSha256": "6afac653199783750339939b701fc9fa403184814c70d78f17c65de41806e2f1"
+    }
+  ]
+}

@@ -25,6 +25,7 @@ a.out
 target
 .scripts
 .direnv/
+/packages/desktop/.cache/
 
 # Local dev files
 opencode-dev

@@ -62,7 +62,7 @@ void initI18n()
 const [updaterState, setUpdaterState] = createSignal<UpdaterState>({ status: "disabled" })
 void window.api.updater.subscribe(setUpdaterState)
 
-const deepLinkEvent = "opencode:deep-link"
+const deepLinkEvent = "openscience:deep-link"
 
 const emitDeepLinks = (urls: string[]) => {
   if (urls.length === 0) return

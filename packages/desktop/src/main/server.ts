@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 import { app, utilityProcess } from "electron"
@@ -25,6 +26,11 @@ type SpawnLocalServerOptions = {
   onStdout?: (message: string) => void
   onStderr?: (message: string) => void
   onExit?: (code: number) => void
+}
+
+function bundledConfigDir() {
+  if (app.isPackaged) return join(process.resourcesPath, "openscience-config")
+  return join(dirname(fileURLToPath(import.meta.url)), "../../resources/openscience-config")
 }
 
 export function getDefaultServerUrl(): string | null {
@@ -214,6 +220,8 @@ function createSidecarEnv(): Record<string, string> {
   delete env.DEBUG
   if (process.platform === "linux") delete env.LD_PRELOAD
   if (!app.isPackaged) env.OPENCODE_DISABLE_CHANNEL_DB = "1"
+  const configDir = bundledConfigDir()
+  if (existsSync(configDir)) env.OPENCODE_CONFIG_DIR = configDir
   return env
 }
 
