@@ -212,7 +212,7 @@ export function DialogAddWslServer(props: DialogWslServerProps = {}) {
         : language.t("wsl.onboarding.checkingOpencode")
     }
     if (opencodeCheck()?.error) return opencodeCheck()!.error
-    if (opencodeCheck()?.matchesDesktop === false) {
+    if (opencodeCheck()?.matchesExpected === false) {
       return distro
         ? language.t("wsl.onboarding.updateOpencodeIn", { distro })
         : language.t("wsl.onboarding.updateOpencode")
@@ -297,7 +297,7 @@ export function DialogAddWslServer(props: DialogWslServerProps = {}) {
                   : index > activeIndex
                     ? "locked"
                     : "warning"
-                : opencodeCheck()?.matchesDesktop === false
+                : opencodeCheck()?.matchesExpected === false
                   ? "warning"
                   : opencodeReady()
                     ? "done"
@@ -551,7 +551,7 @@ export function DialogAddWslServer(props: DialogWslServerProps = {}) {
                         {language.t("wsl.onboarding.refresh")}
                       </Button>
                     </Show>
-                    <Show when={!opencodeReady() || opencodeCheck()?.matchesDesktop === false}>
+                    <Show when={!opencodeReady() || opencodeCheck()?.matchesExpected === false}>
                       <Button
                         variant="secondary"
                         size="large"
@@ -569,7 +569,7 @@ export function DialogAddWslServer(props: DialogWslServerProps = {}) {
                   </div>
                 </div>
                 <div class="text-12-regular text-text-weak whitespace-pre-wrap break-words">{opencodeMessage()}</div>
-                <Show when={opencodeCheck()?.matchesDesktop === false ? opencodeCheck() : null}>
+                <Show when={opencodeCheck()?.matchesExpected === false ? opencodeCheck() : null}>
                   {(check) => (
                     <div class="rounded-md border border-border-weak-base px-3 py-3 flex flex-col gap-1">
                       <div class="text-12-regular text-text-weak">
@@ -583,7 +583,7 @@ export function DialogAddWslServer(props: DialogWslServerProps = {}) {
                         })}
                         <Show when={check().expectedVersion}>
                           {(expected) => (
-                            <span>{` · ${language.t("wsl.onboarding.desktopVersion", { version: expected() })}`}</span>
+                            <span>{` · ${language.t("wsl.onboarding.expectedVersion", { version: expected() })}`}</span>
                           )}
                         </Show>
                       </div>

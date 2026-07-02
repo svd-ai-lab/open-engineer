@@ -7,6 +7,9 @@
 - OpenScience desktop identity lives in `packages/desktop`:
   product name `OpenScience`, appId/AUMID `ai.svd.openscience.desktop`, and
   protocol `openscience`.
+- OpenScience desktop release versions are independent from upstream OpenCode
+  versions. The product version is `packages/desktop/package.json`; the
+  OpenCode base/WSL CLI target is the workspace OpenCode package version.
 - The bundled science layer lives under
   `packages/desktop/resources/openscience-config`.
 - `skills-src/` contains OpenScience-owned skill sources.

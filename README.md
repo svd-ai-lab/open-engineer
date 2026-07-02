@@ -94,6 +94,22 @@ OPENCODE_CONFIG_DIR=<bundled openscience-config>
 OpenScience intentionally does not set `OPENCODE_CONFIG`, does not override the
 default model/provider, and does not inject API keys.
 
+## Versioning
+
+OpenScience has its own desktop release version, independent of upstream
+OpenCode. The product version lives in `packages/desktop/package.json` and is
+the version used by Windows installers, update metadata, and GitHub release
+tags.
+
+The upstream OpenCode base and WSL OpenCode CLI target remain separate. They
+come from the workspace OpenCode package version in
+`packages/opencode/package.json`. Do not use the upstream OpenCode tag as the
+OpenScience desktop package version unless the product release intentionally
+chooses the same number.
+
+The Windows release workflow verifies that the manual release input matches the
+desktop package version before building.
+
 ## Attribution
 
 OpenScience is based on upstream OpenCode v1.17.11 and keeps the upstream MIT

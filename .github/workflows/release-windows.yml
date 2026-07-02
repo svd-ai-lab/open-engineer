@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Release version without the v prefix, for example 0.1.0"
+        description: "OpenScience release version without the v prefix. Must match packages/desktop/package.json."
         required: true
         type: string
       release_notes:
@@ -44,6 +44,20 @@ jobs:
               continue
             }
             Copy-Item $source $target -Force
+          }
+
+      - name: Validate release version
+        run: |
+          $package = Get-Content "packages/desktop/package.json" -Raw | ConvertFrom-Json
+          $inputVersion = "${{ inputs.version }}"
+          if ($package.version -ne $inputVersion) {
+            throw "Release version input '$inputVersion' must match packages/desktop/package.json version '$($package.version)'."
+          }
+
+          $tag = "v$inputVersion"
+          $existingTag = git ls-remote --tags origin "refs/tags/$tag"
+          if ($existingTag) {
+            throw "Release tag '$tag' already exists on origin."
           }
 
       - name: Setup Node

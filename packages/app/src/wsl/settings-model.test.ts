@@ -19,7 +19,7 @@ describe("WSL server settings presentation", () => {
         resolvedPath: null,
         version: null,
         expectedVersion: "1.2.3",
-        matchesDesktop: null,
+        matchesExpected: null,
         error: null,
       }),
     ).toBe("Install OpenCode")
@@ -29,7 +29,7 @@ describe("WSL server settings presentation", () => {
         resolvedPath: "/usr/local/bin/opencode",
         version: "1.2.2",
         expectedVersion: "1.2.3",
-        matchesDesktop: false,
+        matchesExpected: false,
         error: null,
       }),
     ).toBe("Update OpenCode")
@@ -39,7 +39,7 @@ describe("WSL server settings presentation", () => {
         resolvedPath: "/usr/local/bin/opencode",
         version: "1.2.3",
         expectedVersion: "1.2.3",
-        matchesDesktop: true,
+        matchesExpected: true,
         error: null,
       }),
     ).toBeUndefined()

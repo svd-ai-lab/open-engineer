@@ -19,6 +19,7 @@ import { forwardInitializationFailure } from "./initialization"
 import { exportDebugLogs, initCrashReporter, initLogging, startNetLog, write as writeLog } from "./logging"
 import { parseMarkdown } from "./markdown"
 import { createMenu } from "./menu"
+import { OPENCODE_CLI_VERSION } from "./opencode-version"
 import {
   getDefaultServerUrl,
   preferAppEnv,
@@ -137,7 +138,7 @@ const main = Effect.gen(function* () {
   initCrashReporter()
 
   const wslServers = createWslServersController(
-    app.getVersion(),
+    OPENCODE_CLI_VERSION,
     async (distro) => {
       logger.log("spawning wsl sidecar", { distro })
       return spawnWslSidecar(distro, {
@@ -170,6 +171,7 @@ const main = Effect.gen(function* () {
 
   logger.log("app starting", {
     version: app.getVersion(),
+    opencodeVersion: OPENCODE_CLI_VERSION,
     packaged: app.isPackaged,
     onboardingTest: Boolean(onboardingTestRoot),
   })

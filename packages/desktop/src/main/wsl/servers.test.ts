@@ -20,7 +20,7 @@ test("starts every configured WSL server on initialization", () => {
   ).toEqual(["wsl:Debian", "wsl:Ubuntu-24.04"])
 })
 
-test("rejects an update that did not install the desktop version", () => {
+test("rejects an update that did not install the expected OpenCode version", () => {
   expect(() => expectOpencodeVersion("1.16.2", "1.16.2")).not.toThrow()
   expect(() => expectOpencodeVersion("1.14.35", "1.16.2")).toThrow(
     "OpenCode update finished but Debian still reports 1.14.35; expected 1.16.2",
@@ -52,7 +52,7 @@ test("clears cached distro probes when removing a WSL server", () => {
           resolvedPath: "/home/luke/.opencode/bin/opencode",
           version: "1.16.2",
           expectedVersion: "1.16.2",
-          matchesDesktop: true,
+          matchesExpected: true,
           error: null,
         },
       },

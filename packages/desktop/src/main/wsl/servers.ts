@@ -58,7 +58,7 @@ export function wslServerIdForDistro(distro: string) {
 }
 
 export function createWslServersController(
-  appVersion: string,
+  opencodeVersion: string,
   spawnSidecar: SpawnSidecar,
   options?: WslServersControllerOptions,
 ) {
@@ -133,7 +133,7 @@ export function createWslServersController(
     const version = resolved
       ? await (options?.readCommandVersion ?? readWslCommandVersion)(resolved, distro, opts)
       : null
-    return opencodeCheck(distro, resolved, version, appVersion)
+    return opencodeCheck(distro, resolved, version, opencodeVersion)
   }
 
   const refreshOpencodeCheck = async (distro: string, opts?: { signal?: AbortSignal }) => {
@@ -342,12 +342,12 @@ export function createWslServersController(
 
     async installOpencode(name: string) {
       await runJob({ kind: "install-opencode", distro: name, startedAt: Date.now() }, async (abort) => {
-        const result = await installWslOpencode(appVersion, name, { signal: abort.signal })
+        const result = await installWslOpencode(opencodeVersion, name, { signal: abort.signal })
         if (result.code !== 0) {
           throw new Error(summarize(result.stderr || result.stdout) || "OpenCode installation failed")
         }
         await refreshOpencodeCheck(name, { signal: abort.signal })
-        expectOpencodeVersion(state.opencodeChecks[name]?.version ?? null, appVersion, name)
+        expectOpencodeVersion(state.opencodeChecks[name]?.version ?? null, opencodeVersion, name)
         const id = wslServerIdToRestart(state.servers, name)
         if (id) await startServer(id)
       })
@@ -456,7 +456,7 @@ function opencodeCheck(
       resolvedPath: null,
       version: null,
       expectedVersion,
-      matchesDesktop: null,
+      matchesExpected: null,
       error: "opencode is not installed in this distro",
     }
   }
@@ -466,7 +466,7 @@ function opencodeCheck(
       resolvedPath,
       version: null,
       expectedVersion,
-      matchesDesktop: null,
+      matchesExpected: null,
       error: "opencode is installed but could not run",
     }
   }
@@ -475,7 +475,7 @@ function opencodeCheck(
     resolvedPath,
     version,
     expectedVersion,
-    matchesDesktop: version === expectedVersion,
+    matchesExpected: version === expectedVersion,
     error: null,
   }
 }
