@@ -140,13 +140,6 @@
     },
     {
       "type": "external",
-      "name": "flotherm-sim",
-      "repo": "svd-ai-lab/sim-plugin-flotherm",
-      "path": "src/sim_plugin_flotherm/_skills/flotherm",
-      "localCandidates": ["../sim-plugin-flotherm"]
-    },
-    {
-      "type": "external",
       "name": "starccm-sim",
       "repo": "svd-ai-lab/sim-plugin-starccm",
       "path": "src/sim_plugin_starccm/_skills/starccm",

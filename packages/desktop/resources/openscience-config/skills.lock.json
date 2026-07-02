@@ -149,14 +149,6 @@
     },
     {
       "type": "external",
-      "name": "flotherm-sim",
-      "repo": "svd-ai-lab/sim-plugin-flotherm",
-      "commit": "49081e6dba4fca836bc8995fac34ffa4bac1ce65",
-      "path": "src/sim_plugin_flotherm/_skills/flotherm",
-      "skillMdSha256": "fdd31ea00647f2d13c7586c47795fceb3880d1e7ce939a398ca684b6d12fe3ef"
-    },
-    {
-      "type": "external",
       "name": "starccm-sim",
       "repo": "svd-ai-lab/sim-plugin-starccm",
       "commit": "3daad71dc23465b47f6a3b8e7b3f5ba07bd2ba30",
