@@ -21,23 +21,23 @@
       "type": "external",
       "name": "sim-paper-reproduction",
       "repo": "svd-ai-lab/sim-skills",
-      "commit": "c59e99f0c8d461386e7287382925c1f134300dcd",
+      "commit": "4c6bcaa859cb1c87da5b62d83716e5608ed0a354",
       "path": "sim-paper-reproduction",
-      "skillMdSha256": "3f72d63088a84407a15ea528696ee66f9de992ecce1a2bec549ecba3e7e742ea"
+      "skillMdSha256": "920c074e2990de5bbf9f64c679d95c901156f948a6b4888cc277d1b236c9022d"
     },
     {
       "type": "external",
       "name": "simulation-need-discovery",
       "repo": "svd-ai-lab/sim-skills",
-      "commit": "c59e99f0c8d461386e7287382925c1f134300dcd",
+      "commit": "4c6bcaa859cb1c87da5b62d83716e5608ed0a354",
       "path": "simulation-need-discovery",
-      "skillMdSha256": "4adc446d71d2cb5c2bc283ea63852806432d2f7f5127dfbb39c9798aa0295df7"
+      "skillMdSha256": "9518eeab8414ad76f5b2815596040c2b2a5e694aa9a2cf8731f36f6be5d939c3"
     },
     {
       "type": "external",
       "name": "geometry-preview",
       "repo": "svd-ai-lab/sim-skills",
-      "commit": "c59e99f0c8d461386e7287382925c1f134300dcd",
+      "commit": "4c6bcaa859cb1c87da5b62d83716e5608ed0a354",
       "path": "geometry-preview",
       "skillMdSha256": "6fdd2783f4df06a3d23687bb5deaf2c63b9e9e05c5dfef27cfc23d2c2b261118"
     },
