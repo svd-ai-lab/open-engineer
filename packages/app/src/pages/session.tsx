@@ -48,6 +48,7 @@ import {
   createSessionComposerState,
   SessionComposerRegion,
 } from "@/pages/session/composer"
+import { SessionNextStepSuggestions } from "@/pages/session/composer/session-next-step-suggestions"
 import {
   createOpenReviewFile,
   createSessionTabs,
@@ -160,6 +161,11 @@ export default function Page() {
     sessionKey,
     sessionID: () => params.id,
     queryOptions: serverSync().queryOptions,
+  })
+  const nextStepRefreshKey = createMemo(() => {
+    const id = params.id
+    if (!id) return undefined
+    return sync().data.message[id]?.at(-1)?.id
   })
 
   const workspaceTabs = createMemo(() => layout.tabs(workspaceKey))
@@ -523,6 +529,11 @@ export default function Page() {
   let scrollToEnd = () => {}
   let scrollMark = 0
   let messageMark = 0
+
+  const setPromptText = (text: string) => {
+    prompt.set([{ type: "text", content: text, start: 0, end: text.length }], text.length)
+    requestAnimationFrame(() => inputRef?.focus())
+  }
 
   const scrollGestureWindowMs = 250
 
@@ -1588,6 +1599,13 @@ export default function Page() {
         collapsed: view().todoCollapsed.get(),
         onToggle: () => view().todoCollapsed.set(!view().todoCollapsed.get()),
       }}
+      toolbar={
+        <SessionNextStepSuggestions
+          sessionID={params.id}
+          refreshKey={nextStepRefreshKey()}
+          onPick={setPromptText}
+        />
+      }
       ready={!store.deferRender && messagesReady()}
       centered={placement === "dock" && centered()}
       placement={placement}

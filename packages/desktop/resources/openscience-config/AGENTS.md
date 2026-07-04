@@ -33,3 +33,11 @@ Use the bundled skills when they match the request:
 - `sim-paper-reproduction` when reproducing or validating simulation results
   from a paper, thesis, benchmark, report, or reference study.
 - `geometry-preview` before committing fragile geometry to CAD or solvers.
+- `virtuoso`, `spectre`, and `optimizer` for Cadence Virtuoso/Spectre bridge
+  workflows and design optimization when the user's actual environment exposes
+  the required tools.
+
+The Cadence-related skills do not bundle Cadence Virtuoso, Spectre, PDKs,
+licenses, SSH credentials, EDA servers, or customer designs. Verify bridge
+install, profile/env, SSH route, Virtuoso/CIW bridge health, Spectre binary,
+and license status from the user's environment before attempting EDA work.

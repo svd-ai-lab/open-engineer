@@ -57,11 +57,19 @@ against the real solver (saved files, batch execution, or live sessions):
 - `stata-sim` (Stata)
 - `autodeskfusion` (Autodesk Fusion)
 - `rhino` (Rhino)
+- `virtuoso` (Cadence Virtuoso bridge guidance)
+- `spectre` (Cadence Spectre netlist simulation guidance)
+- `optimizer` (black-box design optimization workflows)
 
 External skills are locked by source repository, commit, path, and `SKILL.md`
 SHA256 in `skills.lock.json`. Bundled capability manifests live in
 `packages/desktop/resources/openscience-config/`; generated `skills/` output
 should not be edited by hand.
+
+The Cadence-related skills do not bundle Cadence Virtuoso, Spectre, PDKs,
+licenses, SSH credentials, EDA servers, or customer designs. They guide the
+agent only after the user's actual environment and bridge configuration are
+available.
 
 ## Paper Search
 

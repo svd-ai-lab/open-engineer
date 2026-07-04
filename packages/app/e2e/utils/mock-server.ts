@@ -9,6 +9,8 @@ export interface MockServerConfig {
   project: unknown
   sessions: ({ id: string } & Record<string, unknown>)[]
   pageMessages: (sessionId: string, limit: number, before?: string) => { items: unknown[]; cursor?: string }
+  nextStepSuggestions?: unknown[] | ((sessionID: string) => unknown[])
+  onPromptAsync?: (input: { sessionID: string; body: unknown }) => void
   vcsDiff?: unknown[]
   messageDelay?: number
   onMessages?: (input: { sessionID: string; before?: string; phase: "start" | "end" }) => void
@@ -68,6 +70,21 @@ export async function mockOpenCodeServer(page: Page, config: MockServerConfig) {
     if (todoMatch) return json(route, config.todos?.(todoMatch[1]!) ?? [])
     if (/^\/session\/[^/]+\/(children|diff)$/.test(path)) return json(route, [])
 
+    const suggestionsMatch = path.match(/^\/session\/([^/]+)\/next_step_suggestions$/)
+    if (suggestionsMatch) {
+      const suggestions =
+        typeof config.nextStepSuggestions === "function"
+          ? config.nextStepSuggestions(suggestionsMatch[1]!)
+          : (config.nextStepSuggestions ?? [])
+      return json(route, { suggestions })
+    }
+
+    const promptAsyncMatch = path.match(/^\/session\/([^/]+)\/prompt_async$/)
+    if (promptAsyncMatch && route.request().method() === "POST") {
+      config.onPromptAsync?.({ sessionID: promptAsyncMatch[1]!, body: postData(route) })
+      return json(route, {})
+    }
+
     const messagesMatch = path.match(/^\/session\/([^/]+)\/message$/)
     if (messagesMatch) {
       const token = url.searchParams.get("before") ?? undefined
@@ -87,6 +104,16 @@ export async function mockOpenCodeServer(page: Page, config: MockServerConfig) {
     if (url.port === targetPort && targetPort !== appPort) return json(route, {})
     return route.fallback()
   })
+}
+
+function postData(route: Route) {
+  const raw = route.request().postData()
+  if (!raw) return undefined
+  try {
+    return JSON.parse(raw)
+  } catch {
+    return raw
+  }
 }
 
 function json(route: Route, body: unknown, headers?: Record<string, string>, status = 200) {

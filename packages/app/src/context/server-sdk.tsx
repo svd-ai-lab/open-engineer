@@ -3,7 +3,7 @@ import { createSimpleContext } from "@opencode-ai/ui/context"
 import { createGlobalEmitter } from "@solid-primitives/event-bus"
 import { makeEventListener } from "@solid-primitives/event-listener"
 import { type Accessor, batch, createMemo, onCleanup, onMount } from "solid-js"
-import { createSdkForServer } from "@/utils/server"
+import { authTokenFromCredentials, createSdkForServer } from "@/utils/server"
 import { useLanguage } from "./language"
 import { usePlatform } from "./platform"
 import { ServerConnection, useServer } from "./server"
@@ -272,6 +272,19 @@ function createServerSdkContextBase(server: ServerConnection.Any, scope: ServerS
     scope,
     url: server.http.url,
     client: sdk,
+    fetch(path: string, input?: RequestInit) {
+      const headers = new Headers(input?.headers)
+      if (server.http.password && !headers.has("authorization")) {
+        headers.set(
+          "authorization",
+          `Basic ${authTokenFromCredentials({ username: server.http.username, password: server.http.password })}`,
+        )
+      }
+      return (platform.fetch ?? fetch)(new URL(path, server.http.url), {
+        ...input,
+        headers,
+      })
+    },
     event: {
       on: emitter.on.bind(emitter),
       listen: emitter.listen.bind(emitter),

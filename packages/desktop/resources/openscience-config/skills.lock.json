@@ -194,6 +194,30 @@
       "commit": "49d2b9e02a331190129c83dd2771a30df9edaee2",
       "path": "skills/rhino",
       "skillMdSha256": "77b54afbc1111480cc1097542ae807af6c6470e2f94935506a616d054c5d58d8"
+    },
+    {
+      "type": "external",
+      "name": "virtuoso",
+      "repo": "svd-ai-lab/virtuoso-bridge-lite",
+      "commit": "dc9a4ec5acb1971f683e4717ff9e5a635ba588cf",
+      "path": "skills/virtuoso",
+      "skillMdSha256": "376ef573e2476a9aa22ddcb365e1078a77e995739bba5037b07093857cf5973c"
+    },
+    {
+      "type": "external",
+      "name": "spectre",
+      "repo": "svd-ai-lab/virtuoso-bridge-lite",
+      "commit": "dc9a4ec5acb1971f683e4717ff9e5a635ba588cf",
+      "path": "skills/spectre",
+      "skillMdSha256": "3e2f748d484991b655e9732c559a208f48616fb625e4ffe5f856241043e5e7ec"
+    },
+    {
+      "type": "external",
+      "name": "optimizer",
+      "repo": "svd-ai-lab/virtuoso-bridge-lite",
+      "commit": "dc9a4ec5acb1971f683e4717ff9e5a635ba588cf",
+      "path": "skills/optimizer",
+      "skillMdSha256": "a22019e2fa64dc98c04aec0ec9aed6f2d2517c709bc716ce897e727e702e08e6"
     }
   ]
 }

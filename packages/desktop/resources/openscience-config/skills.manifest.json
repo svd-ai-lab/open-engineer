@@ -179,6 +179,27 @@
       "repo": "svd-ai-lab/sim-plugin-rhino",
       "path": "skills/rhino",
       "localCandidates": ["../sim-plugin-rhino"]
+    },
+    {
+      "type": "external",
+      "name": "virtuoso",
+      "repo": "svd-ai-lab/virtuoso-bridge-lite",
+      "path": "skills/virtuoso",
+      "localCandidates": ["../virtuoso-bridge-lite"]
+    },
+    {
+      "type": "external",
+      "name": "spectre",
+      "repo": "svd-ai-lab/virtuoso-bridge-lite",
+      "path": "skills/spectre",
+      "localCandidates": ["../virtuoso-bridge-lite"]
+    },
+    {
+      "type": "external",
+      "name": "optimizer",
+      "repo": "svd-ai-lab/virtuoso-bridge-lite",
+      "path": "skills/optimizer",
+      "localCandidates": ["../virtuoso-bridge-lite"]
     }
   ]
 }

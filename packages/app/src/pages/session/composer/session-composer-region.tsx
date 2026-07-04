@@ -1,4 +1,4 @@
-import { Show, createEffect, createMemo, createResource, onCleanup } from "solid-js"
+import { Show, createEffect, createMemo, createResource, onCleanup, type JSX } from "solid-js"
 import { createStore } from "solid-js/store"
 import { useSpring } from "@opencode-ai/ui/motion-spring"
 import { PromptInput, type PromptInputControls, type PromptInputProps } from "@/components/prompt-input"
@@ -22,6 +22,7 @@ export function SessionComposerRegion(props: {
   sessionID?: string
   controls: PromptInputControls
   promptInput: Omit<PromptInputProps, "controls" | "variant">
+  toolbar?: JSX.Element
   todo: {
     collapsed: boolean
     onToggle: () => void
@@ -265,6 +266,9 @@ export function SessionComposerRegion(props: {
                   onSend={props.followup!.onSend}
                   onEdit={props.followup!.onEdit}
                 />
+              </Show>
+              <Show when={props.toolbar}>
+                <div class="mb-1 flex min-w-0 justify-end">{props.toolbar}</div>
               </Show>
               <Show
                 when={child()}

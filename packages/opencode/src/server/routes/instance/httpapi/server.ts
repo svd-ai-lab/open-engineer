@@ -31,6 +31,7 @@ import { Question } from "@/question"
 import { SessionCompaction } from "@/session/compaction"
 import { Instruction } from "@/session/instruction"
 import { LLM } from "@/session/llm"
+import { NextStepSuggestions } from "@/session/next-step-suggestions"
 import { SessionProcessor } from "@/session/processor"
 import { SessionPrompt } from "@/session/prompt"
 import { SessionRevert } from "@/session/revert"
@@ -234,6 +235,7 @@ const app = LayerNode.group([
   SessionRevert.node,
   SessionSummary.node,
   SessionPrompt.node,
+  NextStepSuggestions.node,
   Instruction.node,
   LLM.node,
   LSP.node,
