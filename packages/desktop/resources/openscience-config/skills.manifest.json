@@ -49,6 +49,13 @@
     },
     {
       "type": "external",
+      "name": "external-solver-discovery",
+      "repo": "svd-ai-lab/sim-plugin-index",
+      "path": "skills/external-solver-discovery",
+      "localCandidates": ["../sim-plugin-index"]
+    },
+    {
+      "type": "external",
       "name": "pdf",
       "repo": "anthropics/skills",
       "path": "skills/pdf",

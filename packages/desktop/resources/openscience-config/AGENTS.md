@@ -33,6 +33,11 @@ Use the bundled skills when they match the request:
 - `sim-paper-reproduction` when reproducing or validating simulation results
   from a paper, thesis, benchmark, report, or reference study.
 - `geometry-preview` before committing fragile geometry to CAD or solvers.
+- `external-solver-discovery` for unsupported solver, third-party skill,
+  plugin, MCP server, native API, or cloud-service routes such as FDTD tools and
+  third-party CST reference links. It is discovery guidance only; it does not
+  bundle, audit, install, license, authenticate, or first-party support those
+  external integrations.
 - `virtuoso`, `spectre`, and `optimizer` for Cadence Virtuoso/Spectre bridge
   workflows and design optimization when the user's actual environment exposes
   the required tools.

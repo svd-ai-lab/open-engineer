@@ -45,6 +45,14 @@
     },
     {
       "type": "external",
+      "name": "external-solver-discovery",
+      "repo": "svd-ai-lab/sim-plugin-index",
+      "commit": "94e54beb10b75dfac4f8e7ae8952935c414cdc30",
+      "path": "skills/external-solver-discovery",
+      "skillMdSha256": "f124a219fb03a54e2aa96885a207cc9a2ea1e8bab1c70204071d83d2e646c8e7"
+    },
+    {
+      "type": "external",
       "name": "pdf",
       "repo": "anthropics/skills",
       "commit": "57546260929473d4e0d1c1bb75297be2fdfa1949",
